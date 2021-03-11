@@ -85,7 +85,7 @@ def main(args, device):
     model = CharRNN(len(vocab), len(vocab), max_len=args.maxlen).to(device)
     optimizer = torch.optim.Adam(model.parameters(), lr=1e-3)
 
-    pt = torch.load(args.logdir + "/autosave.model.pt", map_location=device)
+    pt = torch.load(args.logdir + "/" + args.model, map_location=device)
     model.load_state_dict(pt['state_dict'])
     optimizer.load_state_dict(pt['optim_state_dict'])
 
@@ -140,6 +140,7 @@ if __name__ == '__main__':
     parser.add_argument('-t', help='temperature', default=1.0, required=False, type=float)
     parser.add_argument('--batch_size', default=128, required=False, type=int)
     parser.add_argument('--maxlen', default=318, required=False, type=int)
+    parser.add_argument('--model', default='autosave.model.pt', type=str)
     args = parser.parse_args()
 
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
